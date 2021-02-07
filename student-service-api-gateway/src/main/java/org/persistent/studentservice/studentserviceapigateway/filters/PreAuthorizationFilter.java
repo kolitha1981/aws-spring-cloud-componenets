@@ -13,9 +13,9 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 
 @Component
-public class AuthorizationFilter extends ZuulFilter {
+public class PreAuthorizationFilter extends ZuulFilter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizationFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PreAuthorizationFilter.class);
 
 	@Override
 	public boolean shouldFilter() {
@@ -27,7 +27,7 @@ public class AuthorizationFilter extends ZuulFilter {
 		final RequestContext requestContext = RequestContext.getCurrentContext();
 		final HttpServletRequest httpServletRequest = requestContext.getRequest();
 		LOGGER.info("@@@@@ Processing request URI -----> :" + httpServletRequest.getRequestURI());
-		LOGGER.info("@@@@@ Checkin for the header -----> :" + GatewayConstants.REQUEST_HEADER_NAME_AUTHORIZATION);
+		LOGGER.info("@@@@@ Checking for the header -----> :" + GatewayConstants.REQUEST_HEADER_NAME_AUTHORIZATION);
 		final String header = httpServletRequest.getHeader(GatewayConstants.REQUEST_HEADER_NAME_AUTHORIZATION);
 		if (header == null || header.isEmpty()) {
 			LOGGER.info(
