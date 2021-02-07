@@ -3,6 +3,7 @@ package org.persistent.studentservice.controller;
 import java.util.function.Consumer;
 
 import org.persistent.studentservice.common.Student;
+import org.persistent.studentservice.common.controller.AbstractStudentController;
 import org.persistent.studentservice.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
 
 @RestController
-public class StudentController {
+public class StudentController implements AbstractStudentController {
 	
 	private static final Logger LOGGER =  LoggerFactory.getLogger(StudentController.class);
 
