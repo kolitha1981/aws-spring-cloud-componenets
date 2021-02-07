@@ -6,8 +6,8 @@ import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.persistent.studentservice.common.Student;
 import org.persistent.studentservice.exceptions.StudentNotFoundException;
-import org.persistent.studentservice.model.Student;
 import org.persistent.studentservice.repository.StudentRepository;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;

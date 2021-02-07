@@ -1,7 +1,7 @@
 package org.persistent.studentservice.service;
 
+import org.persistent.studentservice.common.Student;
 import org.persistent.studentservice.exceptions.StudentNotFoundException;
-import org.persistent.studentservice.model.Student;
 import org.persistent.studentservice.repository.StudentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

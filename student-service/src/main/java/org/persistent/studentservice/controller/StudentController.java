@@ -2,7 +2,7 @@ package org.persistent.studentservice.controller;
 
 import java.util.function.Consumer;
 
-import org.persistent.studentservice.model.Student;
+import org.persistent.studentservice.common.Student;
 import org.persistent.studentservice.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

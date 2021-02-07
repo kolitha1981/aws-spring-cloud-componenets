@@ -8,10 +8,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.persistent.studentservice.model.Student;
-import org.persistent.studentservice.service.StudentService;
-import org.persistent.studentservice.service.StudentServiceImpl;
+import org.persistent.studentservice.common.Student;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

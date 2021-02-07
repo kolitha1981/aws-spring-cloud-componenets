@@ -1,6 +1,6 @@
 package org.persistent.studentservice.service;
 
-import org.persistent.studentservice.model.Student;
+import org.persistent.studentservice.common.Student;
 
 public interface StudentService {
 	

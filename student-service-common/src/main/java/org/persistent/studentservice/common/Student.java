@@ -1,4 +1,4 @@
-package org.persistent.studentservice.model;
+package org.persistent.studentservice.common;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

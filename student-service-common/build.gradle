@@ -1,0 +1,30 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'maven'
+}
+
+group = 'org.persistent.studentservice.common'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.data:spring-data-mongodb'
+	implementation 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+}
+
+jar {
+	enabled = true
+}
+
+bootJar { enabled = false}
+
+test {
+	useJUnitPlatform()
+}

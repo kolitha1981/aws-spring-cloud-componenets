@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.persistent.studentservice.common.Student;
 import org.persistent.studentservice.exception.handler.StudentExceptionHandler;
 import org.persistent.studentservice.exceptions.StudentNotFoundException;
-import org.persistent.studentservice.model.Student;
 import org.persistent.studentservice.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

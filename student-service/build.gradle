@@ -10,6 +10,7 @@ sourceCompatibility = '8'
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 }
 
 ext {
@@ -25,6 +26,7 @@ dependencies {
 	implementation 'org.projectlombok:lombok:1.18.12'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.persistent.studentservice.common:student-service-common:0.0.1-SNAPSHOT'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
