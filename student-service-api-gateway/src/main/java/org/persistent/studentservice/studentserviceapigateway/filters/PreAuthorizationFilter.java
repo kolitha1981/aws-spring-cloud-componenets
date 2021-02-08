@@ -12,7 +12,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 
-@Component
+//@Component
 public class PreAuthorizationFilter extends ZuulFilter {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PreAuthorizationFilter.class);

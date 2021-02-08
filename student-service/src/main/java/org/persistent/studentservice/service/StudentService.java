@@ -7,5 +7,7 @@ public interface StudentService {
 	Student save(Student student);
 	
 	Student findById(Long studentId);
+	
+	boolean deleteStudentById(Long studentId);
 
 }

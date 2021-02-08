@@ -1,5 +1,7 @@
 package org.persistent.studentservice.service;
 
+import java.util.Optional;
+
 import org.persistent.studentservice.common.Student;
 import org.persistent.studentservice.exceptions.StudentNotFoundException;
 import org.persistent.studentservice.repository.StudentRepository;
@@ -32,6 +34,20 @@ public class StudentServiceImpl implements StudentService {
 		return studentRepository.findById(studentId).orElseThrow(() -> {
 			return new StudentNotFoundException("Student not found for id :"+ studentId);
 		});
+	}
+
+	@Override
+	public boolean deleteStudentById(Long studentId) {
+		Student student = this.studentRepository.findById(studentId).orElse(null);
+		if(student != null) {
+			try {
+				this.studentRepository.delete(student);			
+			} catch (Exception e) {
+				LOGGER.info("Error when deleting student with id:" + studentId);
+				return false;
+			}
+		}		
+		return false;
 	}
 
 }

@@ -23,50 +23,61 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
+@Api(value = "StudentuService", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class StudentController implements AbstractStudentController {
-	
-	private static final Logger LOGGER =  LoggerFactory.getLogger(StudentController.class);
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
 	@Autowired
 	private StudentService studentService;
-	@Autowired	
+	@Autowired
 	private EurekaClient eurekaClient;
 	@Value("${spring.application.name}")
 	private String serviceName;
 
-	@PostMapping(path = "/students", consumes = MediaType.APPLICATION_JSON_VALUE, 
-			produces = MediaType.APPLICATION_JSON_VALUE )
+	@ApiOperation(value = "Creates a student instance.", response = ResponseEntity.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully created the student."),
+			@ApiResponse(code = 500, message = "An internal error has occurred.") })
+	@PostMapping(path = "/students", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Student> create(@RequestBody Student student) {
-		LOGGER.info("Saving student with name :" + student.getStudentName() + " and age :" + student.getAge());		
+		LOGGER.info("Saving student with name :" + student.getStudentName() + " and age :" + student.getAge());
 		final Student savedStudent = studentService.save(student);
 		return new ResponseEntity<>(savedStudent, HttpStatus.OK);
 	}
-	
-	@GetMapping(path = "/students/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE )
+
+	@ApiOperation(value = "Retrieves a student for a given Id.", response = ResponseEntity.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved the student."),
+			@ApiResponse(code = 500, message = "An internal error has occurred.") })
+	@GetMapping(path = "/students/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Student> getById(@PathVariable("studentId") Long studentId) {
 		LOGGER.info("Retrieving the stude with id :" + studentId);
 		final Student savedStudent = studentService.findById(studentId);
 		return new ResponseEntity<>(savedStudent, HttpStatus.OK);
 	}
-	
-	@GetMapping(path = "/eureka", produces = MediaType.APPLICATION_JSON_VALUE )
+
+	@GetMapping(path = "/eureka", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<Boolean> eureka() {
-		final Application application =  eurekaClient.getApplication(serviceName);
+		final Application application = eurekaClient.getApplication(serviceName);
 		application.getInstances().stream().forEach(new Consumer<InstanceInfo>() {
 			@Override
-			public void accept(InstanceInfo instanceInfo) {				
-				LOGGER.info("@@@@@@Application group name :"+ instanceInfo.getAppGroupName());
-				LOGGER.info("@@@@@@Application name :"+ instanceInfo.getAppName());
-				LOGGER.info("@@@@@@IP :"+ instanceInfo.getIPAddr());
-				LOGGER.info("@@@@@@Port :"+ instanceInfo.getPort());
+			public void accept(InstanceInfo instanceInfo) {
+				LOGGER.info("@@@@@@Application group name :" + instanceInfo.getAppGroupName());
+				LOGGER.info("@@@@@@Application name :" + instanceInfo.getAppName());
+				LOGGER.info("@@@@@@IP :" + instanceInfo.getIPAddr());
+				LOGGER.info("@@@@@@Port :" + instanceInfo.getPort());
 			}
 		});
-		LOGGER.info("@@@@@@@Registered application name:"+ application.getName());
+		LOGGER.info("@@@@@@@Registered application name:" + application.getName());
 		return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
 	}
-	
+
 }
