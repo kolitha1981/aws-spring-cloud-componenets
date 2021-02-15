@@ -1,7 +1,5 @@
 package org.persistent.studentservice.service;
 
-import java.util.Optional;
-
 import org.persistent.studentservice.common.Student;
 import org.persistent.studentservice.exceptions.StudentNotFoundException;
 import org.persistent.studentservice.repository.StudentRepository;
@@ -16,7 +14,7 @@ public class StudentServiceImpl implements StudentService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
 	private StudentRepository studentRepository;
-	
+
 	@Autowired
 	public StudentServiceImpl(final StudentRepository studentRepository) {
 		this.studentRepository = studentRepository;
@@ -32,22 +30,22 @@ public class StudentServiceImpl implements StudentService {
 	public Student findById(Long studentId) {
 		LOGGER.info("Retrieving student with id :" + studentId);
 		return studentRepository.findById(studentId).orElseThrow(() -> {
-			return new StudentNotFoundException("Student not found for id :"+ studentId);
+			return new StudentNotFoundException("Student not found for id :" + studentId);
 		});
 	}
 
 	@Override
 	public boolean deleteStudentById(Long studentId) {
-		Student student = this.studentRepository.findById(studentId).orElse(null);
-		if(student != null) {
-			try {
-				this.studentRepository.delete(student);			
-			} catch (Exception e) {
-				LOGGER.info("Error when deleting student with id:" + studentId);
-				return false;
-			}
-		}		
-		return false;
+		Student student = this.studentRepository.findById(studentId).orElseThrow(() -> {
+			return new StudentNotFoundException("Student not found for id :" + studentId);
+		});
+		try {
+			this.studentRepository.delete(student);
+		} catch (Exception e) {
+			LOGGER.info("Error when deleting student with id:" + studentId);
+			return false;
+		}
+		return true;
 	}
 
 }
