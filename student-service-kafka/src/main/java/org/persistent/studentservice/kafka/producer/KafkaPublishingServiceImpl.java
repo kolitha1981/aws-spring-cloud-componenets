@@ -3,8 +3,6 @@ package org.persistent.studentservice.kafka.producer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.persistent.studentservice.common.Student;
@@ -32,22 +30,18 @@ public class KafkaPublishingServiceImpl implements KafkaPublishingService {
 
 	@Override
 	public Map<Long, PublishingStatus> publish(List<Student> students) {
-        students.stream().map(new Function<Student, String>() {
-
-			@Override
-			public String apply(Student student) {
-				// TODO Auto-generated method stub
-				return String.valueOf(student.getStudentId());
-			}
+		List<String> messageIds = students.stream().map(student -> {
+			return String.valueOf(student.getStudentId());
 		}).collect(Collectors.toList());
-		LOGGER.info("Publishing student with id :" + "" + " tp topic :" + topicName);
+		LOGGER.info("@@@@@Publishing student with id :" + String.join(",", messageIds) + " tp topic :" + topicName);
 		final ObjectMapper objectMapper = new ObjectMapper();
 		final Map<Long, PublishingStatus> publishingStatuses = new HashMap<>();
 		students.forEach(student -> {
 			try {
 				final Long partition = student.getStudentId() % 3;
+				LOGGER.info("@@@@@Partition :" + partition + " for student id :" + student.getStudentId());
 				final String studentJson = objectMapper.writer().writeValueAsString(student);
-				final ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(studentJson,
+				final ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName,
 						partition.intValue(), System.currentTimeMillis(), String.valueOf(student.getStudentId()),
 						studentJson);
 				future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
@@ -60,12 +54,12 @@ public class KafkaPublishingServiceImpl implements KafkaPublishingService {
 
 					@Override
 					public void onFailure(Throwable ex) {
-						LOGGER.info("Unable to send message=[" + studentJson + "] due to : " + ex.getMessage());
+						LOGGER.info("@@@@@Unable to send message=[" + studentJson + "] due to : " + ex.getMessage());
 					}
 				});
 				publishingStatuses.put(student.getStudentId(), PublishingStatus.STATUS_PENDING);
 			} catch (Exception e) {
-				LOGGER.info("Error when processing student message:" + e.getMessage());
+				LOGGER.info("@@@@@@Error when processing student message:" + e.getMessage());
 				publishingStatuses.put(student.getStudentId(), PublishingStatus.STATUS_FAILED);
 			}
 		});

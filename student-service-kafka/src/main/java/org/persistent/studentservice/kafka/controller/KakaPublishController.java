@@ -1,5 +1,8 @@
 package org.persistent.studentservice.kafka.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.persistent.studentservice.common.Student;
 import org.persistent.studentservice.kafka.domain.PublishingStatus;
 import org.persistent.studentservice.kafka.producer.KafkaPublishingService;
@@ -12,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
 public class KakaPublishController {
 
@@ -22,12 +23,9 @@ public class KakaPublishController {
 
 	@PostMapping(path = "/publish", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<PublishingStatus> publish(@RequestBody Student student) {
-		final PublishingStatus publishingStatus = this.kafkaPublishingService.publish(student);
-		if (publishingStatus == PublishingStatus.STATUS_FAILED) {
-			return new ResponseEntity<>(publishingStatus, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<>(publishingStatus, HttpStatus.OK);
+	public ResponseEntity<Map<Long, PublishingStatus>> publish(@RequestBody List<Student> students) {
+		final Map<Long, PublishingStatus> publishingStatuses = this.kafkaPublishingService.publish(students);
+		return new ResponseEntity<>(publishingStatuses, HttpStatus.OK);
 	}
 
 }

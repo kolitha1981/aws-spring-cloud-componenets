@@ -23,7 +23,8 @@ public class KafkaConsumer {
 
 	private CountDownLatch partitionLatch = new CountDownLatch(2);
 
-	@KafkaListener(topics = "${kafka.student.message.topic.name}", groupId = "${kafka.consumer.group.id}")
+	@KafkaListener(topics = "${kafka.student.message.topic.name}", 
+			groupId = "${kafka.student.consumer.group.id}")
 	public void listenGroupFoo(String message) {
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
@@ -49,8 +50,8 @@ public class KafkaConsumer {
 		latch.countDown();
 	}
 
-	@KafkaListener(topicPartitions = @TopicPartition(topic = "${partitioned.topic.name}", partitions = { "0",
-			"3" }), containerFactory = "partitionsKafkaListenerContainerFactory")
+	@KafkaListener(topicPartitions = @TopicPartition(topic = "${kafka.student.message.topic.name}", 
+			partitions = { "0","1","2" }))
 	public void listenToPartition(@Payload String message, 
 			@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
 			@Header(KafkaHeaders.MESSAGE_KEY) String messageKey, 
