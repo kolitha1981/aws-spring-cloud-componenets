@@ -30,6 +30,7 @@ public class KafkaPublishingServiceImpl implements KafkaPublishingService {
 
 	@Override
 	public Map<Long, PublishingStatus> publish(List<Student> students) {
+		
 		List<String> messageIds = students.stream().map(student -> {
 			return String.valueOf(student.getStudentId());
 		}).collect(Collectors.toList());
