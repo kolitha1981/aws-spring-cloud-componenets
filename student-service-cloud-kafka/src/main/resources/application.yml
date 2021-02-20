@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    stream:
+      default-binder: kafka
+      kafka:
+        binder:
+          brokers:
+          - localhost:9092
+      bindings:
+        input:
+         binder: kafka
+         destination: student-messages
+         content-type: text/plain
+         group: student-messages-group
+        output:
+          binder: kafka
+          destination: student-messages
+          group: student-messages-group
+          content-type: text/plain
