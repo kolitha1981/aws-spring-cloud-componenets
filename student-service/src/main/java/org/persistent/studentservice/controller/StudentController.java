@@ -1,6 +1,8 @@
 package org.persistent.studentservice.controller;
 
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.persistent.studentservice.common.Student;
 import org.persistent.studentservice.common.controller.AbstractStudentController;
@@ -9,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +31,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@RestController
+@RefreshScope
 @Api(value = "StudentuService", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class StudentController implements AbstractStudentController {
 
@@ -39,7 +42,7 @@ public class StudentController implements AbstractStudentController {
 	@Autowired
 	private EurekaClient eurekaClient;
 	@Value("${spring.application.name}")
-	private String serviceName;
+	private String serviceName;	
 
 	@ApiOperation(value = "Creates a student instance.", response = ResponseEntity.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully created the student."),
@@ -50,6 +53,20 @@ public class StudentController implements AbstractStudentController {
 		LOGGER.info("Saving student with name :" + student.getStudentName() + " and age :" + student.getAge());
 		final Student savedStudent = studentService.save(student);
 		return new ResponseEntity<>(savedStudent, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Creates multiple student instances.", response = ResponseEntity.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully created the student instances."),
+			@ApiResponse(code = 500, message = "An internal error has occurred.") })
+	@PostMapping(path = "/students/batch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<Student>> createAsBatch(@RequestBody List<Student> students) {
+		final List<String> studentIds = students.stream().map((student) ->  {
+				return String.valueOf(student.getStudentId());
+			}).collect(Collectors.toList());
+		LOGGER.info("Saving students with ids :" + String.join(",", studentIds));
+		final List<Student> savedStudents = studentService.saveAll(students);
+		return new ResponseEntity<>(savedStudents, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Retrieves a student for a given Id.", response = ResponseEntity.class)

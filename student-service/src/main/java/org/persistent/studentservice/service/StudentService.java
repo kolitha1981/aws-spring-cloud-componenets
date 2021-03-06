@@ -1,5 +1,7 @@
 package org.persistent.studentservice.service;
 
+import java.util.List;
+
 import org.persistent.studentservice.common.Student;
 
 public interface StudentService {
@@ -9,5 +11,7 @@ public interface StudentService {
 	Student findById(Long studentId);
 	
 	boolean deleteStudentById(Long studentId);
+	
+	List<Student> saveAll(List<Student> students);
 
 }
